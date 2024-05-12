@@ -4,6 +4,7 @@
 class BatterySensor {
     public:
         BatterySensor();
+        void setVoltage(float voltage);
 
     private:
         float voltage;

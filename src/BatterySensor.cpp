@@ -6,3 +6,7 @@ BatterySensor::BatterySensor() :
     capacity(0),
     remaining(0) {
 }
+
+void BatterySensor::setVoltage(float voltage) {
+    this->voltage = voltage;
+}
