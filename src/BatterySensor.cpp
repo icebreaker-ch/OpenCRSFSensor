@@ -11,26 +11,21 @@ BatterySensor::BatterySensor() :
 
 void BatterySensor::setVoltage(float voltage) {
     this->voltage = voltage;
+    uint8_t cellCount = estimateCellCount(voltage);
+    float empty = CELL_EMPTY_VOLTS * cellCount;
+    float full = CELL_FULL_VOLTS * cellCount;
+    remaining = 100.0 * (voltage - empty) / (full - empty);
 }
 
 uint8_t *BatterySensor::getPayLoad() {
-    voltage = 12.34;
     current = 23.45;
-    capacity -= 0.1;
-    remaining += 0.1;
+    capacity = 2200.0;
 
     uint16_t valVoltage = (uint16_t)(round(10.0 * voltage));
     uint16_t valCurrent = (uint16_t)(round(10.0 * current));
     uint32_t valCapacity = (uint32_t)(round(capacity));
     uint8_t valRemaining = (uint8_t)(round(remaining));
 
-    Serial.println(valVoltage);
-    Serial.println(valCurrent);
-    Serial.println(valCapacity);
-    Serial.println(valRemaining);
-    Serial.println("---");
-
-//    payLoad[0] = (valVoltage >> 8) && 0xFF;
     payLoad[0] = (valVoltage >> 8) & 0xFF;
     payLoad[1] = valVoltage & 0xFF;
     payLoad[2] = (valCurrent >> 8) & 0xFF;
@@ -40,4 +35,15 @@ uint8_t *BatterySensor::getPayLoad() {
     payLoad[6] = valCapacity & 0xFF;
     payLoad[7] = valRemaining;
     return payLoad;
+}
+
+uint8_t BatterySensor::estimateCellCount(float voltage)
+{
+    for (uint8_t cells = 1; cells <= 12; ++cells) {
+        if ((cells * CELL_EMPTY_VOLTS <= voltage) && (voltage <= cells * CELL_FULL_VOLTS)) {
+            return cells;
+        }
+    }
+    // Strange battery voltage...
+    return (uint8_t)(round(voltage / CELL_NORM_VOLTS));
 }

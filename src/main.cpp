@@ -1,19 +1,25 @@
 #include <Arduino.h>
 
+#include "config.h"
 #include "BatterySensor.h"
+#include "VoltageSensor.h"
 #include "crc8.h"
 #include "CrsfProtocol.h"
 
-Crc8 crc(CRSFProtocol::CRSF_POLY);
-CRSFProtocol protocol(crc);
-BatterySensor batterySensor;
+static Crc8 crc(CRSFProtocol::CRSF_POLY);
+static CRSFProtocol protocol(crc);
+static VoltageSensor voltageSensor(4, 2700, 1000);
+static BatterySensor batterySensor;
 
 void setup() {
   Serial.begin(9600);
-  Serial1.begin(420000, SERIAL_8N1, 16, 17);
+  Serial1.begin(CRSF_BAUDRATE, SERIAL_8N1, RX_PIN, TX_PIN);
 }
 
 void loop() {
+  float voltage = voltageSensor.getVoltage();
+  batterySensor.setVoltage(voltage);
+  Serial.println(voltage);
   uint8_t *payLoad = batterySensor.getPayLoad();
   protocol.setData(BatterySensor::FRAMETYPE, payLoad, BatterySensor::PAYLOAD_LEN);
   Serial1.write(protocol.getBuffer(), protocol.getBufferLen());
