@@ -2,11 +2,14 @@
 #define BATTERY_SENSOR_H
 
 #include <stdint.h>
+#include <IVoltageSensor.h>
 
 class BatterySensor {
     public:
         BatterySensor();
-        void setVoltage(float voltage);
+        void update();
+        void setVoltageSensor(IVoltageSensor *pVoltageSensor);
+
         uint8_t *getPayLoad();
 
         static const unsigned int PAYLOAD_LEN = 8;
@@ -17,7 +20,6 @@ class BatterySensor {
 
 
     private:
-        uint8_t estimateCellCount(float voltage);
         static const unsigned NUM_BATTERY_VALUES = 9;
         static const unsigned MAX_CELLS = 12;
         
@@ -29,6 +31,9 @@ class BatterySensor {
         float capacity;
         float remaining;
         uint8_t payLoad[PAYLOAD_LEN];
+
+        IVoltageSensor *pVoltageSensor;
+        uint8_t estimateCellCount(float voltage);
 };
 
 #endif

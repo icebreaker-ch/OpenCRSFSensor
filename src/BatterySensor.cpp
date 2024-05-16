@@ -12,8 +12,12 @@ BatterySensor::BatterySensor() :
     remaining(0) {
 }
 
-void BatterySensor::setVoltage(float voltage) {
-    this->voltage = voltage;
+void BatterySensor::setVoltageSensor(IVoltageSensor *pVoltageSensor) {
+    this->pVoltageSensor = pVoltageSensor;
+}
+
+void BatterySensor::update() {
+    voltage = pVoltageSensor->getVoltage();
     uint8_t cellCount = estimateCellCount(voltage);
 
     float cellVoltage = voltage / cellCount;

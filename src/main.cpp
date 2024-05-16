@@ -8,19 +8,20 @@
 
 static Crc8 crc(CRSFProtocol::CRSF_POLY);
 static CRSFProtocol protocol(crc);
-static VoltageSensor voltageSensor(4, 2700, 1000);
-static BatterySensor batterySensor;
+static BatterySensor *pBatterySensor;
 
 void setup() {
-  Serial.begin(9600);
-  Serial1.begin(CRSF_BAUDRATE, SERIAL_8N1, RX_PIN, TX_PIN);
+    Serial.begin(9600);
+    Serial1.begin(CRSF_BAUDRATE, SERIAL_8N1, RX_PIN, TX_PIN);
+    VoltageSensor *pVoltageSensor = new VoltageSensor(4, 2700, 1000);
+    pBatterySensor = new BatterySensor();
+    pBatterySensor->setVoltageSensor(pVoltageSensor);
 }
 
 void loop() {
-  float voltage = voltageSensor.getVoltage();
-  batterySensor.setVoltage(voltage);
-  uint8_t *payLoad = batterySensor.getPayLoad();
-  protocol.setData(BatterySensor::FRAMETYPE, payLoad, BatterySensor::PAYLOAD_LEN);
-  Serial1.write(protocol.getBuffer(), protocol.getBufferLen());
-  delay(500);
+    pBatterySensor->update();
+    uint8_t *payLoad = pBatterySensor->getPayLoad();
+    protocol.setData(BatterySensor::FRAMETYPE, payLoad, BatterySensor::PAYLOAD_LEN);
+    Serial1.write(protocol.getBuffer(), protocol.getBufferLen());
+  	delay(500);
 }
