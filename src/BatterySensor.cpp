@@ -12,9 +12,26 @@ BatterySensor::BatterySensor() :
 void BatterySensor::setVoltage(float voltage) {
     this->voltage = voltage;
     uint8_t cellCount = estimateCellCount(voltage);
-    float empty = CELL_EMPTY_VOLTS * cellCount;
-    float full = CELL_FULL_VOLTS * cellCount;
-    remaining = 100.0 * (voltage - empty) / (full - empty);
+    
+    if (cellCount > 0) {
+        float cellVoltage = voltage / cellCount;
+
+        if (cellVoltage < lipoVoltage[0])
+            remaining = 0;
+        else if (cellVoltage > lipoVoltage[NUM_LIPO_VALUES - 1])
+            remaining = 100.0;
+        else {
+            for (unsigned index = 0; index < NUM_LIPO_VALUES -2; ++index) {
+                float lowerVoltage = lipoVoltage[index];
+                float upperVoltage = lipoVoltage[index + 1];
+                if ((lowerVoltage <= cellVoltage) && (cellVoltage <= upperVoltage)) {
+                    float lowerPercentage = lipoPercent[index];
+                    float upperPercentage = lipoPercent[index + 1];
+                    remaining = lowerPercentage + (upperPercentage - lowerPercentage) * ((cellVoltage - lowerVoltage) / (upperVoltage - lowerVoltage));
+                }
+            }
+        }
+    }
 }
 
 uint8_t *BatterySensor::getPayLoad() {

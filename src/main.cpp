@@ -19,7 +19,6 @@ void setup() {
 void loop() {
   float voltage = voltageSensor.getVoltage();
   batterySensor.setVoltage(voltage);
-  Serial.println(voltage);
   uint8_t *payLoad = batterySensor.getPayLoad();
   protocol.setData(BatterySensor::FRAMETYPE, payLoad, BatterySensor::PAYLOAD_LEN);
   Serial1.write(protocol.getBuffer(), protocol.getBufferLen());
