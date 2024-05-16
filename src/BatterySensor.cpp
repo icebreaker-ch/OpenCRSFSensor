@@ -2,6 +2,9 @@
 #include "BatterySensor.h"
 #include <math.h>
 
+const float BatterySensor::lipoVoltage[NUM_BATTERY_VALUES] = {3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4.0, 4.1, 4.2};
+const float BatterySensor::lipoPercent[NUM_BATTERY_VALUES] = {0.0, 8.0, 22.0, 45.0, 65.0, 80.0, 90.0, 97.0, 100.0};
+
 BatterySensor::BatterySensor() :
     voltage(0),
     current(0),
@@ -12,23 +15,23 @@ BatterySensor::BatterySensor() :
 void BatterySensor::setVoltage(float voltage) {
     this->voltage = voltage;
     uint8_t cellCount = estimateCellCount(voltage);
-    
-    if (cellCount > 0) {
-        float cellVoltage = voltage / cellCount;
 
-        if (cellVoltage < lipoVoltage[0])
-            remaining = 0;
-        else if (cellVoltage > lipoVoltage[NUM_LIPO_VALUES - 1])
-            remaining = 100.0;
-        else {
-            for (unsigned index = 0; index < NUM_LIPO_VALUES -2; ++index) {
-                float lowerVoltage = lipoVoltage[index];
-                float upperVoltage = lipoVoltage[index + 1];
-                if ((lowerVoltage <= cellVoltage) && (cellVoltage <= upperVoltage)) {
-                    float lowerPercentage = lipoPercent[index];
-                    float upperPercentage = lipoPercent[index + 1];
-                    remaining = lowerPercentage + (upperPercentage - lowerPercentage) * ((cellVoltage - lowerVoltage) / (upperVoltage - lowerVoltage));
-                }
+    float cellVoltage = voltage / cellCount;
+
+    if (cellVoltage < lipoVoltage[0])
+        remaining = 0;
+    else if (cellVoltage > lipoVoltage[NUM_BATTERY_VALUES - 1])
+        remaining = 100.0;
+    else {
+        for (unsigned index = 0; index < NUM_BATTERY_VALUES - 2; ++index) {
+            float lowerVoltage = lipoVoltage[index];
+            float upperVoltage = lipoVoltage[index + 1];
+            if ((lowerVoltage <= cellVoltage) && (cellVoltage <= upperVoltage)) {
+                float diffVoltage = upperVoltage - lowerVoltage;
+                float lowerPercentage = lipoPercent[index];
+                float upperPercentage = lipoPercent[index + 1];
+                float diffPercentage = upperPercentage - lowerPercentage;
+                remaining = lowerPercentage + diffPercentage * ((cellVoltage - lowerVoltage) / diffVoltage);
             }
         }
     }
@@ -54,13 +57,12 @@ uint8_t *BatterySensor::getPayLoad() {
     return payLoad;
 }
 
-uint8_t BatterySensor::estimateCellCount(float voltage)
-{
-    for (uint8_t cells = 1; cells <= 12; ++cells) {
-        if ((cells * CELL_EMPTY_VOLTS <= voltage) && (voltage <= cells * CELL_FULL_VOLTS)) {
-            return cells;
+uint8_t BatterySensor::estimateCellCount(float voltage) {
+    for (uint8_t numCells = 1; numCells <= MAX_CELLS; ++numCells) {
+        if ((numCells * CELL_EMPTY_VOLTS <= voltage) && (voltage <= numCells * CELL_FULL_VOLTS)) {
+            return numCells;
         }
     }
     // Strange battery voltage...
-    return (uint8_t)(round(voltage / CELL_NORM_VOLTS));
+    return min((uint8_t)1, (uint8_t)(round(voltage / CELL_NORM_VOLTS)));
 }
