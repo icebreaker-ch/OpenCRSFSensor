@@ -26,6 +26,7 @@ void setup() {
 
     pBatterySensor = new BatterySensor();
     pBatterySensor->setVoltageSensor(pVoltageSensor);
+    pBatterySensor->setCurrentSensor(pCurrentSensor);
 }
 
 void loop() {
