@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "BatterySensor.h"
 #include <math.h>
+#include "log.h"
 
 const float BatterySensor::lipoVoltage[NUM_BATTERY_VALUES] = {3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4.0, 4.1, 4.2};
 const float BatterySensor::lipoPercent[NUM_BATTERY_VALUES] = {0.0, 8.0, 22.0, 45.0, 65.0, 80.0, 90.0, 97.0, 100.0};
@@ -9,41 +10,30 @@ BatterySensor::BatterySensor() :
     voltage(0),
     current(0),
     capacity(2200),
-    remaining(0) {
+    remaining(0),
+    pVoltageSensor(nullptr),
+    pCurrentSensor(nullptr) {
 }
 
 void BatterySensor::setVoltageSensor(IVoltageSensor *pVoltageSensor) {
     this->pVoltageSensor = pVoltageSensor;
 }
 
+void BatterySensor::setCurrentSensor(ICurrentSensor *pCurrentSensor) {
+    this->pCurrentSensor = pCurrentSensor;
+}
+
 void BatterySensor::update() {
     voltage = pVoltageSensor->getVoltage();
-    uint8_t cellCount = estimateCellCount(voltage);
-
-    float cellVoltage = voltage / cellCount;
-
-    if (cellVoltage < lipoVoltage[0])
-        remaining = 0;
-    else if (cellVoltage > lipoVoltage[NUM_BATTERY_VALUES - 1])
-        remaining = 100.0;
-    else {
-        for (unsigned index = 0; index < NUM_BATTERY_VALUES - 2; ++index) {
-            float lowerVoltage = lipoVoltage[index];
-            float upperVoltage = lipoVoltage[index + 1];
-            if ((lowerVoltage <= cellVoltage) && (cellVoltage <= upperVoltage)) {
-                float diffVoltage = upperVoltage - lowerVoltage;
-                float lowerPercentage = lipoPercent[index];
-                float upperPercentage = lipoPercent[index + 1];
-                float diffPercentage = upperPercentage - lowerPercentage;
-                remaining = lowerPercentage + diffPercentage * ((cellVoltage - lowerVoltage) / diffVoltage);
-            }
-        }
-    }
+    LOG("Voltage: ", voltage, " V\n");
+    current = pCurrentSensor->getCurrent();
+    LOG("Current ", current, "A\n");
+    remaining = estimateRemaining(voltage);
+    LOG("Remaining: ", remaining, " %\n");
 }
 
 uint8_t *BatterySensor::getPayLoad() {
-    current = 23.45;
-    capacity = 2200.0;
+    capacity = 0.0; // TBD replace by real capacity measurement
 
     uint16_t valVoltage = (uint16_t)(round(10.0 * voltage));
     uint16_t valCurrent = (uint16_t)(round(10.0 * current));
@@ -69,4 +59,30 @@ uint8_t BatterySensor::estimateCellCount(float voltage) {
     }
     // Strange battery voltage...
     return min((uint8_t)1, (uint8_t)(round(voltage / CELL_NORM_VOLTS)));
+}
+
+float BatterySensor::estimateRemaining(float voltage) {
+    float remaining = 0;    
+    uint8_t cellCount = estimateCellCount(voltage);
+
+    float cellVoltage = voltage / cellCount;
+
+    if (cellVoltage < lipoVoltage[0])
+        remaining = 0;
+    else if (cellVoltage > lipoVoltage[NUM_BATTERY_VALUES - 1])
+        remaining = 100.0;
+    else {
+        for (unsigned index = 0; index < NUM_BATTERY_VALUES - 2; ++index) {
+            float lowerVoltage = lipoVoltage[index];
+            float upperVoltage = lipoVoltage[index + 1];
+            if ((lowerVoltage <= cellVoltage) && (cellVoltage <= upperVoltage)) {
+                float diffVoltage = upperVoltage - lowerVoltage;
+                float lowerPercentage = lipoPercent[index];
+                float upperPercentage = lipoPercent[index + 1];
+                float diffPercentage = upperPercentage - lowerPercentage;
+                remaining = lowerPercentage + diffPercentage * ((cellVoltage - lowerVoltage) / diffVoltage);
+            }
+        }
+    }
+    return remaining;
 }

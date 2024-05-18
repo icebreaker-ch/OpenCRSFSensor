@@ -2,6 +2,7 @@
 #define BATTERY_SENSOR_H
 
 #include <stdint.h>
+#include <ICurrentSensor.h>
 #include <IVoltageSensor.h>
 
 class BatterySensor {
@@ -9,6 +10,7 @@ class BatterySensor {
         BatterySensor();
         void update();
         void setVoltageSensor(IVoltageSensor *pVoltageSensor);
+        void setCurrentSensor(ICurrentSensor *pCurrentSensor);
 
         uint8_t *getPayLoad();
 
@@ -33,7 +35,9 @@ class BatterySensor {
         uint8_t payLoad[PAYLOAD_LEN];
 
         IVoltageSensor *pVoltageSensor;
+        ICurrentSensor *pCurrentSensor;
         uint8_t estimateCellCount(float voltage);
+        float estimateRemaining(float voltage);
 };
 
 #endif
