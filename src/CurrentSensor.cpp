@@ -20,9 +20,10 @@ void CurrentSensor::setFilter(Filter *pFilter) {
 }
 
 void CurrentSensor::update() {
-    long analogReadValue = analogRead(analogPin);
-    long pinMilliVolts = analogReadValue * ANALOG_REFERENCE_VOLTAGE / MAX_ANALOG_READ;
-    double current = (pinMilliVolts - millivoltsForZeroAmps) / millivoltsPerAmp;
+    uint16_t analogReadValue = analogRead(analogPin);
+    LOG("READ CURRENT: ", analogReadValue, "\n");
+    long pinVoltage = analogReadValue * ANALOG_REFERENCE_VOLTAGE / MAX_ANALOG_READ;
+    double current = (1000.0 * pinVoltage - millivoltsForZeroAmps) / millivoltsPerAmp;
 
     pFilter->addValue(current);
 
@@ -30,7 +31,7 @@ void CurrentSensor::update() {
     if (elapsedTime >= reportInterval) {
         current = pFilter ? pFilter->getFilteredValue() : current;
         pFilter->reset();
-        LOG("Reporting new Current: ", reportCurrent, "\n");
+        LOG("Reporting new Current: ", current, "\n");
 
         consumption += current * elapsedTime / MILLIAMPS_PER_AMP / SECONDS_PER_HOUR;
         timer.reset();

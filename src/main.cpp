@@ -20,7 +20,7 @@ void setup() {
     pVoltageSensor->setFilter(new MeanValueFilter());
     pVoltageSensor->setReportInterval(STANDARD_REPORT_INTERVAL);
 
-    CurrentSensor *pCurrentSensor = new CurrentSensor(5, 0, 40);
+    CurrentSensor *pCurrentSensor = new CurrentSensor(34, 0, 200);
     pCurrentSensor->setFilter(new MeanValueFilter());
     pCurrentSensor->setReportInterval(STANDARD_REPORT_INTERVAL);
 
