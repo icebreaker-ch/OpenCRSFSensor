@@ -17,13 +17,16 @@ class CurrentSensor : public ICurrentSensor {
         CurrentSensor(uint8_t analogPin, double millivoltsForZeroAmps, double millivoltsPerAmp);
         void setReportInterval(unsigned long reportInterval);
         void setFilter(Filter *pFilter);
+        void update() override;
         double getCurrent() override;
+        double getConsumption() override;
 
     private:
         uint8_t analogPin;
         double millivoltsForZeroAmps;
         double millivoltsPerAmp;
-        double lastReportCurrent;
+        double current; // A
+        double consumption; // mAh
         Filter *pFilter;
         Timer timer;
         unsigned long reportInterval;

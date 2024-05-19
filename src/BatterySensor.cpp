@@ -9,7 +9,7 @@ const float BatterySensor::lipoPercent[NUM_BATTERY_VALUES] = {0.0, 8.0, 22.0, 45
 BatterySensor::BatterySensor() :
     voltage(0),
     current(0),
-    capacity(2200),
+    capacity(0),
     remaining(0),
     pVoltageSensor(nullptr),
     pCurrentSensor(nullptr) {
@@ -24,17 +24,21 @@ void BatterySensor::setCurrentSensor(ICurrentSensor *pCurrentSensor) {
 }
 
 void BatterySensor::update() {
+    pVoltageSensor->update();
     voltage = pVoltageSensor->getVoltage();
     LOG("Voltage: ", voltage, " V\n");
+
+    pCurrentSensor->update();
     current = pCurrentSensor->getCurrent();
     LOG("Current ", current, "A\n");
+    capacity = pCurrentSensor->getConsumption();
+    LOG("Capacity ", capacity, "mAh\n");
+
     remaining = estimateRemaining(voltage);
     LOG("Remaining: ", remaining, " %\n");
 }
 
 uint8_t *BatterySensor::getPayLoad() {
-    capacity = 0.0; // TBD replace by real capacity measurement
-
     uint16_t valVoltage = (uint16_t)(round(10.0 * voltage));
     uint16_t valCurrent = (uint16_t)(round(10.0 * current));
     uint32_t valCapacity = (uint32_t)(round(capacity));

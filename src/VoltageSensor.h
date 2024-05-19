@@ -31,13 +31,14 @@ class VoltageSensor : public IVoltageSensor {
         VoltageSensor(uint8_t analogPin, long resistorToVoltage, long resistorToGround);
         void setReportInterval(unsigned long reportInterval);
         void setFilter(Filter *pFilter);
+        void update() override;
         double getVoltage() override;
 
     private:
         uint8_t analogPin;
         long resistorToVoltage;
         long resistorToGround;
-        double lastReportVoltage;
+        double voltage;
         Filter *pFilter;
         Timer timer;
         unsigned long reportInterval;

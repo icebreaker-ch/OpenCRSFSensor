@@ -3,6 +3,7 @@
 
 class IVoltageSensor {
     public:
+        virtual void update() = 0;
         virtual double getVoltage() = 0;
 };
 

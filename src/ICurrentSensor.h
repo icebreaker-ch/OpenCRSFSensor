@@ -3,7 +3,9 @@
 
 class ICurrentSensor {
     public:
+        virtual void update() = 0; 
         virtual double getCurrent() = 0;
+        virtual double getConsumption() = 0;
 };
 
 #endif
