@@ -30,9 +30,9 @@ void BatterySensor::update() {
 
     pCurrentSensor->update();
     current = pCurrentSensor->getCurrent();
-    LOG("Current ", current, "A\n");
+    LOG("Current ", current, " A\n");
     capacity = pCurrentSensor->getConsumption();
-    LOG("Capacity ", capacity, "mAh\n");
+    LOG("Capacity ", capacity, " mAh\n");
 
     remaining = estimateRemaining(voltage);
     LOG("Remaining: ", remaining, " %\n");
@@ -62,11 +62,11 @@ uint8_t BatterySensor::estimateCellCount(float voltage) {
         }
     }
     // Strange battery voltage...
-    return min((uint8_t)1, (uint8_t)(round(voltage / CELL_NORM_VOLTS)));
+    return max((uint8_t)1, (uint8_t)(round(voltage / CELL_NORM_VOLTS)));
 }
 
 float BatterySensor::estimateRemaining(float voltage) {
-    float remaining = 0;    
+    float remaining = 0;
     uint8_t cellCount = estimateCellCount(voltage);
 
     float cellVoltage = voltage / cellCount;

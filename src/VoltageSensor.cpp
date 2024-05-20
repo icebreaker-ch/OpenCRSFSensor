@@ -26,7 +26,7 @@ void VoltageSensor::update() {
     pFilter->addValue(inputVoltage);
 
     if (timer.getElapsedTime() >= reportInterval) {
-        voltage = pFilter ? pFilter->getFilteredValue() : inputVoltage;
+        voltage = pFilter->getFilteredValue();
         pFilter->reset();
         LOG("Reporting new Voltage: ", voltage, "\n");
         timer.reset();

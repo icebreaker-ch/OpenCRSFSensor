@@ -2,7 +2,6 @@
 #include <log.h>
 #include "CurrentSensor.h"
 
-#define MILLIAMPS_PER_AMP 1000.0
 #define SECONDS_PER_HOUR 3600.0
 
 CurrentSensor::CurrentSensor(uint8_t analogPin, double millivoltsForZeroAmps, double millivoltsPerAmp) :
@@ -10,7 +9,7 @@ CurrentSensor::CurrentSensor(uint8_t analogPin, double millivoltsForZeroAmps, do
     millivoltsForZeroAmps(millivoltsForZeroAmps),
     millivoltsPerAmp(millivoltsPerAmp),
     current(0.0),
-    consumption(0),
+    consumption(0.0),
     pFilter(nullptr),
     reportInterval(0) {
 }
@@ -21,19 +20,19 @@ void CurrentSensor::setFilter(Filter *pFilter) {
 
 void CurrentSensor::update() {
     uint16_t analogReadValue = analogRead(analogPin);
-    LOG("READ CURRENT: ", analogReadValue, "\n");
-    long pinVoltage = analogReadValue * ANALOG_REFERENCE_VOLTAGE / MAX_ANALOG_READ;
-    double current = (1000.0 * pinVoltage - millivoltsForZeroAmps) / millivoltsPerAmp;
+    double pinVoltage = analogReadValue * ANALOG_REFERENCE_VOLTAGE / MAX_ANALOG_READ;
+    double readCurrent = (1000.0 * pinVoltage - millivoltsForZeroAmps) / millivoltsPerAmp;
 
-    pFilter->addValue(current);
+    pFilter->addValue(readCurrent);
 
     unsigned long elapsedTime = timer.getElapsedTime();
     if (elapsedTime >= reportInterval) {
-        current = pFilter ? pFilter->getFilteredValue() : current;
+        current = pFilter->getFilteredValue();
         pFilter->reset();
         LOG("Reporting new Current: ", current, "\n");
 
-        consumption += current * elapsedTime / MILLIAMPS_PER_AMP / SECONDS_PER_HOUR;
+        // Calculate consumption
+        consumption += current * elapsedTime / SECONDS_PER_HOUR; // mAh
         timer.reset();
     }
 }
