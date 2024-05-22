@@ -10,10 +10,12 @@
 #define CRSF_CRC_POLY 0xD5
 
 CRSFProtocol::CRSFProtocol(Crc8 &crc8) :
-    crc8(crc8) {
+    crc8(crc8),
+    bufferLen(0) {
+        memset(buffer, '\000', CRSFProtocol::MAX_LEN);
 }
 
-void CRSFProtocol::setData(uint8_t frameType, uint8_t *payLoad, uint8_t payLoadLen)
+void CRSFProtocol::setData(uint8_t frameType, const uint8_t *payLoad, uint8_t payLoadLen)
 {
     buffer[POS_SYNC] = CRSF_SYNC_BYTE;
     buffer[POS_LEN] = payLoadLen + 2;

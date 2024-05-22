@@ -66,15 +66,15 @@ uint8_t BatterySensor::estimateCellCount(float voltage) {
 }
 
 float BatterySensor::estimateRemaining(float voltage) {
-    float remaining = 0;
+    float estimatedRemaining = 0;
     uint8_t cellCount = estimateCellCount(voltage);
 
     float cellVoltage = voltage / cellCount;
 
     if (cellVoltage < lipoVoltage[0])
-        remaining = 0;
+        estimatedRemaining = 0;
     else if (cellVoltage > lipoVoltage[NUM_BATTERY_VALUES - 1])
-        remaining = 100.0;
+        estimatedRemaining = 100.0;
     else {
         for (unsigned index = 0; index < NUM_BATTERY_VALUES - 2; ++index) {
             float lowerVoltage = lipoVoltage[index];
@@ -84,9 +84,9 @@ float BatterySensor::estimateRemaining(float voltage) {
                 float lowerPercentage = lipoPercent[index];
                 float upperPercentage = lipoPercent[index + 1];
                 float diffPercentage = upperPercentage - lowerPercentage;
-                remaining = lowerPercentage + diffPercentage * ((cellVoltage - lowerVoltage) / diffVoltage);
+                estimatedRemaining = lowerPercentage + diffPercentage * ((cellVoltage - lowerVoltage) / diffVoltage);
             }
         }
     }
-    return remaining;
+    return estimatedRemaining;
 }
