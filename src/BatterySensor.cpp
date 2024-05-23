@@ -3,8 +3,8 @@
 #include <math.h>
 #include "log.h"
 
-const float BatterySensor::lipoVoltage[NUM_BATTERY_VALUES] = {3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4.0, 4.1, 4.2};
-const float BatterySensor::lipoPercent[NUM_BATTERY_VALUES] = {0.0, 8.0, 22.0, 45.0, 65.0, 80.0, 90.0, 97.0, 100.0};
+const float BatterySensor::lipoVoltage[NUM_INTERPOLATION_POINTS] = {3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4.0, 4.1, 4.2};
+const float BatterySensor::lipoPercent[NUM_INTERPOLATION_POINTS] = {0.0, 8.0, 22.0, 45.0, 65.0, 80.0, 90.0, 97.0, 100.0};
 
 BatterySensor::BatterySensor() :
     voltage(0),
@@ -73,10 +73,10 @@ float BatterySensor::estimateRemaining(float voltage) {
 
     if (cellVoltage < lipoVoltage[0])
         estimatedRemaining = 0;
-    else if (cellVoltage > lipoVoltage[NUM_BATTERY_VALUES - 1])
+    else if (cellVoltage > lipoVoltage[NUM_INTERPOLATION_POINTS - 1])
         estimatedRemaining = 100.0;
     else {
-        for (unsigned index = 0; index < NUM_BATTERY_VALUES - 2; ++index) {
+        for (unsigned index = 0; index < NUM_INTERPOLATION_POINTS - 2; ++index) {
             float lowerVoltage = lipoVoltage[index];
             float upperVoltage = lipoVoltage[index + 1];
             if ((lowerVoltage <= cellVoltage) && (cellVoltage <= upperVoltage)) {

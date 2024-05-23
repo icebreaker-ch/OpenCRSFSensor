@@ -7,6 +7,9 @@
 
 class BatterySensor {
     public:
+        static const unsigned int PAYLOAD_LEN = 8;
+        static const unsigned int FRAMETYPE = 0x08;
+
         BatterySensor();
         void update();
         void setVoltageSensor(IVoltageSensor *pVoltageSensor);
@@ -14,19 +17,16 @@ class BatterySensor {
 
         uint8_t *getPayLoad();
 
-        static const unsigned int PAYLOAD_LEN = 8;
-        static const unsigned int FRAMETYPE = 0x08;
+    private:
         static constexpr float CELL_EMPTY_VOLTS = 3.4;
         static constexpr float CELL_NORM_VOLTS = 3.7;
         static constexpr float CELL_FULL_VOLTS = 4.2;
 
-
-    private:
-        static const unsigned NUM_BATTERY_VALUES = 9;
+        static const unsigned NUM_INTERPOLATION_POINTS = 9;
         static const unsigned MAX_CELLS = 12;
         
-        static const float lipoVoltage[NUM_BATTERY_VALUES];
-        static const float lipoPercent[NUM_BATTERY_VALUES];
+        static const float lipoVoltage[NUM_INTERPOLATION_POINTS];
+        static const float lipoPercent[NUM_INTERPOLATION_POINTS];
 
         float voltage;
         float current;
