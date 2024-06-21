@@ -19,6 +19,8 @@ class GPSSensor {
         double latitude;
         double longitude;
         double altitude;
+        double speed;
+        double course;
         uint8_t satteliteCount;
 };
 
