@@ -6,6 +6,8 @@
 #include "CurrentSensor.h"
 #include "BatterySensor.h"
 #include "VoltageSensor.h"
+#include "NeoGPSSensor.h"
+#include "GPSSensor.h"
 #include "crc8.h"
 #include "CrsfProtocol.h"
 #include "MeanValueFilter.h"
@@ -14,6 +16,8 @@ static Crc8 crc(CRSFProtocol::CRSF_POLY);
 static CRSFProtocol protocol(crc);
 static BatterySensor *pBatterySensor;
 static BaroAltitudeSensor *pBaroAltitudeSensor;
+static GPSSensor *pGPSSensor;
+
 void setup() {
     Serial.begin(9600);
     Serial1.begin(CRSF_BAUDRATE, SERIAL_8N1, RX_PIN, TX_PIN);
@@ -33,6 +37,8 @@ void setup() {
     pBaroAltitudeSensor = new BaroAltitudeSensor(new BME280());
     pBaroAltitudeSensor->setFilter(new MeanValueFilter());
     pBaroAltitudeSensor->setReportInterval(STANDARD_REPORT_INTERVAL);
+
+    pGPSSensor = new GPSSensor(new NeoGPSSensor(Serial2));
 }
 
 
@@ -45,6 +51,11 @@ void loop() {
     pBaroAltitudeSensor->update();
     payLoad = pBaroAltitudeSensor->getPayLoad();
     protocol.setData(BaroAltitudeSensor::FRAMETYPE, payLoad, BaroAltitudeSensor::PAYLOAD_LEN);
+    protocol.write(Serial1);
+
+    pGPSSensor->update();
+    payLoad = pGPSSensor->getPayLoad();
+    protocol.setData(GPSSensor::FRAMETYPE, payLoad, GPSSensor::PAYLOAD_LEN);
     protocol.write(Serial1);
 
   	delay(50);

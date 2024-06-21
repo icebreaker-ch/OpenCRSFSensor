@@ -27,4 +27,9 @@
 */
 #define STANDARD_REPORT_INTERVAL 500
 
+/**
+ * Number of milliseconds for sensor timeout
+ */
+#define SENSOR_TIMEOUT 10000
+
 #endif
