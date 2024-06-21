@@ -3,7 +3,7 @@
 
 NeoGPSSensor::NeoGPSSensor(HardwareSerial &serial) :
     serial(serial) {
-    serial.begin(9600, SERIAL_8N1, 18, 19);
+    serial.begin(GPS_BAUDRATE, SERIAL_8N1, GPS_RX_PIN, GPS_TX_PIN);
 }
 
 void NeoGPSSensor::update() {

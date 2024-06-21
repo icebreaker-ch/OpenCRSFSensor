@@ -21,8 +21,6 @@ void GPSSensor::update() {
     speed = pGPSDataProvider->getSpeed();
     course = pGPSDataProvider->getCourse();
     satteliteCount = pGPSDataProvider->getSattelites();
-    Serial.print("Sat:");
-    Serial.println(satteliteCount);
 }
 
 uint8_t *GPSSensor::getPayLoad() {
@@ -32,13 +30,13 @@ uint8_t *GPSSensor::getPayLoad() {
     int16_t valCourse = int16_t(round(course * 100.0));
     uint16_t valAltitude = uint16_t(round(altitude + 1000.0));
 
-    Encoder::encode32(valLatitude, &payLoad[0]);
-    Encoder::encode32(valLongitude, &payLoad[4]);
-    Encoder::encode16(valGroundSpeed, &payLoad[8]);
-    Encoder::encode16(valCourse, &payLoad[10]);
-    Encoder::encode16(valAltitude, &payLoad[12]);
-    payLoad[14] = satteliteCount;
+    uint8_t *buffer = payLoad;
+    buffer = Encoder::encode32(valLatitude, buffer);
+    buffer = Encoder::encode32(valLongitude, buffer);
+    buffer = Encoder::encode16(valGroundSpeed, buffer);
+    buffer = Encoder::encode16(valCourse, buffer);
+    buffer = Encoder::encode16(valAltitude, buffer);
+    Encoder::encode8(satteliteCount, buffer);
 
     return payLoad;
-
 }

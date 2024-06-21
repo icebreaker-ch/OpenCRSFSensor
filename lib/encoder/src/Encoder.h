@@ -5,7 +5,9 @@
 
 class Encoder {
     public:
-        static void encode32(uint32_t value, uint8_t *buffer);
-        static void encode16(uint16_t value, uint8_t *buffer);
+        static uint8_t *encode32(uint32_t value, uint8_t *buffer);
+        static uint8_t *encode24(uint32_t value, uint8_t *buffer);
+        static uint8_t *encode16(uint16_t value, uint8_t *buffer);
+        static uint8_t *encode8(uint8_t value, uint8_t *buffer);
 };
 #endif

@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "BatterySensor.h"
 #include <math.h>
+#include <Encoder.h>
 #include "log.h"
 
 const float BatterySensor::lipoVoltage[NUM_INTERPOLATION_POINTS] = {3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4.0, 4.1, 4.2};
@@ -44,14 +45,11 @@ uint8_t *BatterySensor::getPayLoad() {
     uint32_t valCapacity = (uint32_t)(round(capacity));
     uint8_t valRemaining = (uint8_t)(round(remaining));
 
-    payLoad[0] = (valVoltage >> 8) & 0xFF;
-    payLoad[1] = valVoltage & 0xFF;
-    payLoad[2] = (valCurrent >> 8) & 0xFF;
-    payLoad[3] = valCurrent & 0xFF;
-    payLoad[4] = (valCapacity >> 16) & 0xFF;
-    payLoad[5] = (valCapacity >> 8) & 0xFF;
-    payLoad[6] = valCapacity & 0xFF;
-    payLoad[7] = valRemaining;
+    uint8_t *buffer = payLoad;
+    buffer = Encoder::encode16(valVoltage, buffer);
+    buffer = Encoder::encode16(valCurrent, buffer);
+    buffer = Encoder::encode24(valCapacity, buffer);
+    Encoder::encode8(valRemaining, buffer);
     return payLoad;
 }
 
