@@ -8,6 +8,7 @@
 #include "VoltageSensor.h"
 #include "NeoGPSSensor.h"
 #include "GPSSensor.h"
+#include "FlightModeSensor.h"
 #include "crc8.h"
 #include "CrsfProtocol.h"
 #include "MeanValueFilter.h"
@@ -22,7 +23,11 @@ static BatterySensor *pBatterySensor;
 static BaroAltitudeSensor *pBaroAltitudeSensor;
 #endif
 
+#ifdef GPS_SENSOR
 static GPSSensor *pGPSSensor;
+#endif
+
+static FlightModeSensor *pFlightModeSensor;
 
 void setup() {
     Serial.begin(9600);
@@ -51,6 +56,10 @@ void setup() {
 #ifdef GPS_SENSOR
     pGPSSensor = new GPSSensor(new NeoGPSSensor(Serial2));
 #endif
+
+#ifdef FLIGHT_MODE_SENSOR
+    FlightModeSensor *pFlightModeSensor = new FlightModeSensor();
+#endif
 }
 
 
@@ -73,6 +82,13 @@ void loop() {
     pGPSSensor->update();
     payLoad = pGPSSensor->getPayLoad();
     protocol.setData(GPSSensor::FRAMETYPE, payLoad, GPSSensor::PAYLOAD_LEN);
+    protocol.write(Serial1);
+#endif
+
+#ifdef FLIGHT_MODE_SENSOR
+    pFlightModeSensor->update();
+    payLoad = pFlightModeSensor->getPayLoad();
+    protocol.setData(FlightModeSensor::FRAMETYPE, payLoad, pFlightModeSensor->getPayLoadLen());
     protocol.write(Serial1);
 #endif
 

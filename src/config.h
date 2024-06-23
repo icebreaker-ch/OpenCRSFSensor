@@ -19,6 +19,11 @@
 #define GPS_SENSOR
 
 /**
+ * Define this if you want to have a FlightMode sensor
+*/
+#define FLIGHT_MODE_SENSOR
+
+/**
  * Analog pin for Voltage sensor
 */
 #define VOLTAGE_ANALOG_PIN GPIO_NUM_32
