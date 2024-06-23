@@ -64,9 +64,10 @@ void setup() {
 
 
 void loop() {
+    uint8_t *payLoad;
 #ifdef BATTERY_SENSOR
     pBatterySensor->update();
-    uint8_t *payLoad = pBatterySensor->getPayLoad();
+    payLoad = pBatterySensor->getPayLoad();
     protocol.setData(BatterySensor::FRAMETYPE, payLoad, BatterySensor::PAYLOAD_LEN);
     protocol.write(Serial1);
 #endif
