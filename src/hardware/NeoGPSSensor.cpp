@@ -1,14 +1,13 @@
 #include "config.h"
 #include "NeoGPSSensor.h"
 
-NeoGPSSensor::NeoGPSSensor(HardwareSerial &serial) :
-    serial(serial) {
-    serial.begin(GPS_BAUDRATE, SERIAL_8N1, GPS_RX_PIN, GPS_TX_PIN);
+NeoGPSSensor::NeoGPSSensor(Stream &stream) :
+    stream(stream) {
 }
 
 void NeoGPSSensor::update() {
-    while (serial.available() > 0) {
-        char c = serial.read();
+    while (stream.available() > 0) {
+        char c = stream.read();
         gps.encode(c);
     }
 }

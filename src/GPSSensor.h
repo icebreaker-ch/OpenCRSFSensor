@@ -2,7 +2,7 @@
 #define GPS_SENSOR_H
 
 #include <stdint.h>
-#include "IGPSDataProivider.h"
+#include "IGPSDataProvider.h"
 
 class GPSSensor {
     public:

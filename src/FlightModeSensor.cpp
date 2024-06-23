@@ -1,15 +1,19 @@
+#include <Arduino.h>
 #include "FlightModeSensor.h"
 
-FlightModeSensor::FlightModeSensor() {
+FlightModeSensor::FlightModeSensor() :
+    count(0) {
 }
 
 void FlightModeSensor::update() {
+    ++count;
 }
 
-uint8_t *FlightModeSensor::getPayLoad() {    
-    return (uint8_t *)"TEST";
+uint8_t *FlightModeSensor::getPayLoad() {
+    sprintf((char *)payLoad, "TEST:%d", count);
+    return payLoad;
 }
 
 unsigned int FlightModeSensor::getPayLoadLen() {
-    return 5;
+    return strlen((char *)payLoad) + 1;
 }

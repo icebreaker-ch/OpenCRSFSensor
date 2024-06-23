@@ -6,17 +6,27 @@
 /**
  * Define this if you want to have a battery sensor
 */
-#define BATTERY_SENSOR
+// #define BATTERY_SENSOR
+
+/**
+ * Define this if you have a voltage sensor
+*/
+// #define VOLTAGE_SENSOR
+
+/**
+ * Define this if you have a current sensor
+*/
+//#define CURRENT_SENSOR
 
 /**
  * Define this if you want to have a Baro (Vario) sensor
 */
-#define BARO_ALTITUDE_SENSOR
+// #define BARO_ALTITUDE_SENSOR
 
 /**
  * Define this if you want to have a GPS sensor
 */
-#define GPS_SENSOR
+// #define GPS_SENSOR
 
 /**
  * Define this if you want to have a FlightMode sensor
@@ -26,7 +36,7 @@
 /**
  * Analog pin for Voltage sensor
 */
-#define VOLTAGE_ANALOG_PIN GPIO_NUM_32
+#define VOLTAGE_ANALOG_PIN GPIO_NUM_0
 
 /**
  * Analog pin for Current sensor
@@ -54,6 +64,12 @@
 */
 #define GPS_RX_PIN GPIO_NUM_18
 #define GPS_TX_PIN GPIO_NUM_19
+
+/**
+ * Pins for I2C communication
+ */
+#define BARO_SDA_PIN GPIO_NUM_6
+#define BARO_SCL_PIN GPIO_NUM_7
 
 /**
  * Reference voltage for analog measurments

@@ -25,18 +25,21 @@ void BatterySensor::setCurrentSensor(ICurrentSensor *pCurrentSensor) {
 }
 
 void BatterySensor::update() {
-    pVoltageSensor->update();
-    voltage = pVoltageSensor->getVoltage();
-    LOG("Voltage: ", voltage, " V\n");
+    if (pVoltageSensor) {
+        pVoltageSensor->update();
+        voltage = pVoltageSensor->getVoltage();
+        LOG("Voltage: ", voltage, " V\n");
+        remaining = estimateRemaining(voltage);
+        LOG("Remaining: ", remaining, " %\n");
+    }
 
-    pCurrentSensor->update();
-    current = pCurrentSensor->getCurrent();
-    LOG("Current ", current, " A\n");
-    capacity = pCurrentSensor->getConsumption();
-    LOG("Capacity ", capacity, " mAh\n");
-
-    remaining = estimateRemaining(voltage);
-    LOG("Remaining: ", remaining, " %\n");
+    if (pCurrentSensor) {
+        pCurrentSensor->update();
+        current = pCurrentSensor->getCurrent();
+        LOG("Current ", current, " A\n");
+        capacity = pCurrentSensor->getConsumption();
+        LOG("Capacity ", capacity, " mAh\n");
+    }
 }
 
 uint8_t *BatterySensor::getPayLoad() {

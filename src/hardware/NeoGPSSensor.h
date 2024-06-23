@@ -4,11 +4,11 @@
 #include "config.h"
 #include <Arduino.h>
 #include <TinyGPSPlus.h>
-#include "IGPSDataProivider.h"
+#include "IGPSDataProvider.h"
 
 class NeoGPSSensor : public IGPSDataProvider {
     public:
-        explicit NeoGPSSensor(HardwareSerial &serial);
+        explicit NeoGPSSensor(Stream &stream);
         void update();
         uint8_t getSattelites() override;
         double getLongitude() override;
@@ -18,7 +18,7 @@ class NeoGPSSensor : public IGPSDataProvider {
         double getCourse() override;
 
     private:
-        HardwareSerial &serial;
+        Stream &stream;
         TinyGPSPlus gps;
 };
 
