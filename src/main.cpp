@@ -33,18 +33,18 @@ static FlightModeSensor *pFlightModeSensor;
 
 void setup() {
     Serial.begin(9600);
-    Serial1.begin(CRSF_BAUDRATE, SERIAL_8N1, RX_PIN, TX_PIN);
+    Serial1.begin(CRSF_BAUDRATE, SERIAL_8N1, CRSF_RX_PIN, CRSF_TX_PIN);
 
     VoltageSensor *pVoltageSensor = nullptr;
 #ifdef VOLTAGE_SENSOR
-    pVoltageSensor = new VoltageSensor(VOLTAGE_ANALOG_PIN, 2700, 1000);
+    pVoltageSensor = new VoltageSensor(VOLTAGE_ANALOG_PIN, RESISTOR_TO_VOLTAGE, RESISTOR_TO_GROUND);
     pVoltageSensor->setFilter(new MeanValueFilter());
     pVoltageSensor->setReportInterval(STANDARD_REPORT_INTERVAL);
 #endif
 
     CurrentSensor *pCurrentSensor = nullptr;
 #ifdef CURRENT_SENSOR
-    pCurrentSensor = new CurrentSensor(CURRENT_ANALOG_PIN, 0, 200);
+    pCurrentSensor = new CurrentSensor(CURRENT_ANALOG_PIN, MILLIVOLTS_FOR_ZERO_AMP, MILLIVOLTS_PER_AMP);
     pCurrentSensor->setFilter(new MeanValueFilter());
     pCurrentSensor->setReportInterval(STANDARD_REPORT_INTERVAL);
 #endif

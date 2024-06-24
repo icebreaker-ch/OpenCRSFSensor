@@ -9,7 +9,7 @@ class GPSSensor {
         static const unsigned int PAYLOAD_LEN = 15;
         static const unsigned int FRAMETYPE = 0x02;
 
-        GPSSensor(IGPSDataProvider *pGPSDataProvider);
+        explicit GPSSensor(IGPSDataProvider *pGPSDataProvider);
         void update();
         uint8_t *getPayLoad();
 

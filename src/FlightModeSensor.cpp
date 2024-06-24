@@ -10,10 +10,10 @@ void FlightModeSensor::update() {
 }
 
 uint8_t *FlightModeSensor::getPayLoad() {
-    sprintf((char *)payLoad, "TEST:%d", count);
+    sprintf(reinterpret_cast<char *>(payLoad), "TEST:%u", count);
     return payLoad;
 }
 
 unsigned int FlightModeSensor::getPayLoadLen() {
-    return strlen((char *)payLoad) + 1;
+    return strlen(reinterpret_cast<char *>(payLoad)) + 1;
 }

@@ -3,40 +3,49 @@
 
 #include <Arduino.h>
 
-/**
- * Define this if you want to have a battery sensor
-*/
-// #define BATTERY_SENSOR
+//-----------------------------------------------------------------------------
+// CRSF communication
+//-----------------------------------------------------------------------------
 
 /**
- * Define this if you have a voltage sensor
+ * Pins for CRSF communication
 */
-// #define VOLTAGE_SENSOR
+#define CRSF_RX_PIN GPIO_NUM_16
+#define CRSF_TX_PIN GPIO_NUM_17
 
 /**
- * Define this if you have a current sensor
+ * Baudrade for CRSF communication
 */
-//#define CURRENT_SENSOR
+#define CRSF_BAUDRATE 416666 //420000
+
+//-----------------------------------------------------------------------------
+// Voltage Sensor
+//-----------------------------------------------------------------------------
 
 /**
- * Define this if you want to have a Baro (Vario) sensor
+ * Define this if you want to have a voltage sensor
 */
-// #define BARO_ALTITUDE_SENSOR
-
-/**
- * Define this if you want to have a GPS sensor
-*/
-// #define GPS_SENSOR
-
-/**
- * Define this if you want to have a FlightMode sensor
-*/
-#define FLIGHT_MODE_SENSOR
+#define VOLTAGE_SENSOR
 
 /**
  * Analog pin for Voltage sensor
 */
-#define VOLTAGE_ANALOG_PIN GPIO_NUM_0
+#define VOLTAGE_ANALOG_PIN GPIO_NUM_32
+
+/**
+ * Values for voltage divider
+ */
+#define RESISTOR_TO_VOLTAGE 2700
+#define RESISTOR_TO_GROUND  1000
+
+//-----------------------------------------------------------------------------
+// Current Sensor
+//-----------------------------------------------------------------------------
+
+/**
+ * Define this if you want to have a current sensor
+*/
+#define CURRENT_SENSOR
 
 /**
  * Analog pin for Current sensor
@@ -44,15 +53,41 @@
 #define CURRENT_ANALOG_PIN GPIO_NUM_33
 
 /**
- * Baudrade for CRSF communication
-*/
-#define CRSF_BAUDRATE 420000
+ * Current sensor parameters
+ */
+#define MILLIVOLTS_FOR_ZERO_AMP 0
+#define MILLIVOLTS_PER_AMP 20
+
+//-----------------------------------------------------------------------------
+// Battery Sensor (Voltage, Current)
+//-----------------------------------------------------------------------------
+#if defined(VOLTAGE_SENSOR) || defined(CURRENT_SENSOR)
+#define BATTERY_SENSOR
+#endif
+
+//-----------------------------------------------------------------------------
+// Baro/Altitude Sensor (Vario)
+//-----------------------------------------------------------------------------
 
 /**
- * Pins for CRSF communication
+ * Define this if you want to have a Baro (Vario) sensor
 */
-#define RX_PIN GPIO_NUM_16
-#define TX_PIN GPIO_NUM_17
+#define BARO_ALTITUDE_SENSOR
+
+/**
+ * Pins for Baro I2C communication
+ */
+#define BARO_SDA_PIN GPIO_NUM_21
+#define BARO_SCL_PIN GPIO_NUM_22
+
+//-----------------------------------------------------------------------------
+// GPS Sensor
+//-----------------------------------------------------------------------------
+
+/**
+ * Define this if you want to have a GPS sensor
+*/
+#define GPS_SENSOR
 
 /**
  * Baudrate for GPS communication
@@ -65,12 +100,19 @@
 #define GPS_RX_PIN GPIO_NUM_18
 #define GPS_TX_PIN GPIO_NUM_19
 
-/**
- * Pins for I2C communication
- */
-#define BARO_SDA_PIN GPIO_NUM_6
-#define BARO_SCL_PIN GPIO_NUM_7
+//-----------------------------------------------------------------------------
+// Flight Mode Sensor (experimental)
+//-----------------------------------------------------------------------------
 
+/**
+ * Define this if you want to have a FlightMode sensor
+*/
+#define FLIGHT_MODE_SENSOR
+
+
+//-----------------------------------------------------------------------------
+// General config
+//-----------------------------------------------------------------------------
 /**
  * Reference voltage for analog measurments
 */
