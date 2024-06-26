@@ -9,7 +9,7 @@ RC Receivers:
 
 Microcontrollers:
 - WROOM ESP32
-- ESP32-C3 SuperMicro
+- ESP32-C3 SuperMini
 
 ```mermaid
 graph LR;
