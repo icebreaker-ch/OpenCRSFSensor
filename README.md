@@ -21,5 +21,5 @@ graph LR;
     esp-->rc["ExpressLRS
 RC Receiver"]
 ```
-## ESP32 SUper mini wiring example
+## ESP32 Super mini wiring example
 ![ESP32 SuperMini Connections](https://github.com/icebreaker-ch/OpenCRSFSensor/assets/3645375/0644d657-7215-4514-9575-bd55a2f53a8d)
