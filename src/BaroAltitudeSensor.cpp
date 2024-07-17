@@ -3,6 +3,7 @@
 #include <math.h>
 #include <Arduino.h>
 #include <Encoder.h>
+#include "log.h"
 #include "BaroAltitudeSensor.h"
 
 BaroAltitudeSensor::BaroAltitudeSensor(IAltitudeSensor *pAltitudeSensor) :
@@ -21,6 +22,7 @@ void BaroAltitudeSensor::update() {
         float newAltitude = pFilter->getFilteredValue();
         pFilter->reset();        
         verticalSpeed = 1000.0 * (newAltitude - altitude) / elapsedTime;
+        LOG("newAltitude:", newAltitude, " verticalSpeed:", verticalSpeed, "\n");
         altitude = newAltitude;
         timer.reset();
     }
@@ -28,7 +30,7 @@ void BaroAltitudeSensor::update() {
 
 uint8_t *BaroAltitudeSensor::getPayLoad() {
     uint16_t valAltitude = (uint16_t)(round(10000.0 + 10 * altitude)); /// 10000 + dm
-    uint16_t valVerticalSpeed = (uint16_t)(round(100 * verticalSpeed)); // cm/s
+    int16_t valVerticalSpeed = (int16_t)(round(100 * verticalSpeed)); // cm/s
 
     uint8_t *buffer = payLoad;
     buffer = Encoder::encode16(valAltitude, buffer);

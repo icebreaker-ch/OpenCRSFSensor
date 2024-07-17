@@ -4,10 +4,10 @@
 
 #define SECONDS_PER_HOUR 3600.0
 
-CurrentSensor::CurrentSensor(uint8_t analogPin, double millivoltsForZeroAmps, double millivoltsPerAmp) :
+CurrentSensor::CurrentSensor(uint8_t analogPin):
     analogPin(analogPin),
-    millivoltsForZeroAmps(millivoltsForZeroAmps),
-    millivoltsPerAmp(millivoltsPerAmp),
+    milliVoltsForZeroAmps(0.0),
+    milliVoltsPerAmp(0.0),
     current(0.0),
     consumption(0.0),
     pFilter(nullptr),
@@ -19,9 +19,8 @@ void CurrentSensor::setFilter(Filter *pFilter) {
 }
 
 void CurrentSensor::update() {
-    uint16_t analogReadValue = analogRead(analogPin);
-    double pinVoltage = analogReadValue * ANALOG_REFERENCE_VOLTAGE / MAX_ANALOG_READ;
-    double readCurrent = (1000.0 * pinVoltage - millivoltsForZeroAmps) / millivoltsPerAmp;
+    double pinVoltage = readPinVoltage();
+    double readCurrent = (1000.0 * pinVoltage - milliVoltsForZeroAmps) / milliVoltsPerAmp;
 
     pFilter->addValue(readCurrent);
 
@@ -37,7 +36,16 @@ void CurrentSensor::update() {
     }
 }
 
-void CurrentSensor::setReportInterval(unsigned long reportInterval) {
+void CurrentSensor::setMilliVoltsForZeroAmps(double milliVoltsForZeroAmps) {
+    this->milliVoltsForZeroAmps = milliVoltsForZeroAmps;
+}
+
+void CurrentSensor::setMilliVoltsPerAmp(double milliVoltsPerAmp) {
+    this->milliVoltsPerAmp = milliVoltsPerAmp;
+}
+
+void CurrentSensor::setReportInterval(unsigned long reportInterval)
+{
     this->reportInterval = reportInterval;
 }
 
@@ -47,4 +55,9 @@ double CurrentSensor::getCurrent() {
 
 double CurrentSensor::getConsumption() {
     return consumption;
+}
+
+double CurrentSensor::readPinVoltage() {
+    uint16_t analogReadValue = analogRead(analogPin);
+    return analogReadValue * ANALOG_REFERENCE_VOLTAGE / MAX_ANALOG_READ;
 }

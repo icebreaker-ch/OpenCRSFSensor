@@ -1,7 +1,9 @@
 #include <Arduino.h>
 #include "config.h"
+#include "log.h"
 #include "BME280.h"
 #include "BaroAltitudeSensor.h"
+#include "AutoCurrentSensor.h"
 #include "CurrentSensor.h"
 #include "BatterySensor.h"
 #include "VoltageSensor.h"
@@ -35,6 +37,7 @@ void setup() {
     Serial.begin(9600);
     Serial1.begin(CRSF_BAUDRATE, SERIAL_8N1, CRSF_RX_PIN, CRSF_TX_PIN);
 
+
     VoltageSensor *pVoltageSensor = nullptr;
 #ifdef VOLTAGE_SENSOR
     pVoltageSensor = new VoltageSensor(VOLTAGE_ANALOG_PIN, RESISTOR_TO_VOLTAGE, RESISTOR_TO_GROUND);
@@ -42,11 +45,15 @@ void setup() {
     pVoltageSensor->setReportInterval(STANDARD_REPORT_INTERVAL);
 #endif
 
-    CurrentSensor *pCurrentSensor = nullptr;
+    ICurrentSensor *pCurrentSensor = nullptr;
+
 #ifdef CURRENT_SENSOR
-    pCurrentSensor = new CurrentSensor(CURRENT_ANALOG_PIN, MILLIVOLTS_FOR_ZERO_AMP, MILLIVOLTS_PER_AMP);
-    pCurrentSensor->setFilter(new MeanValueFilter());
-    pCurrentSensor->setReportInterval(STANDARD_REPORT_INTERVAL);
+    AutoCurrentSensor *pSensor = new AutoCurrentSensor(CURRENT_ANALOG_PIN);
+    pSensor->setMilliVoltsPerAmp(MILLIVOLTS_PER_AMP);
+    pSensor->setFilter(new MeanValueFilter);
+    pSensor->setReportInterval(STANDARD_REPORT_INTERVAL);
+    pSensor->setCalibrationPeriod(5000);
+    pCurrentSensor = pSensor;
 #endif
 
 #ifdef BATTERY_SENSOR

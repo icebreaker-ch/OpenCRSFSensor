@@ -14,21 +14,26 @@
  */
 class CurrentSensor : public ICurrentSensor {
     public:
-        CurrentSensor(uint8_t analogPin, double millivoltsForZeroAmps, double millivoltsPerAmp);
+        CurrentSensor(uint8_t analogPin);
+        void setMilliVoltsForZeroAmps(double milliVoltsForZeroAmps);
+        void setMilliVoltsPerAmp(double milliVoltsPerAmp);
         void setReportInterval(unsigned long reportInterval);
         void setFilter(Filter *pFilter);
-        void update() override;
+        virtual void update() override;
         double getCurrent() override;
         double getConsumption() override;
 
+    protected:
+        Timer timer;
+        double readPinVoltage();
+
     private:
         uint8_t analogPin;
-        double millivoltsForZeroAmps;
-        double millivoltsPerAmp;
+        double milliVoltsForZeroAmps;
+        double milliVoltsPerAmp;
         double current; // A
         double consumption; // mAh
         Filter *pFilter;
-        Timer timer;
         unsigned long reportInterval;
 };
 
