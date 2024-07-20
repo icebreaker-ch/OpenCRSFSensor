@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <ICurrentSensor.h>
 #include <IVoltageSensor.h>
+#include "CellCountDetector.h"
 
 class BatterySensor {
     public:
@@ -14,17 +15,12 @@ class BatterySensor {
         void update();
         void setVoltageSensor(IVoltageSensor *pVoltageSensor);
         void setCurrentSensor(ICurrentSensor *pCurrentSensor);
+        void setCellCountDetector(CellCountDetector *pCellCountDetector);
 
         uint8_t *getPayLoad();
 
     private:
-        static constexpr float CELL_EMPTY_VOLTS = 3.4;
-        static constexpr float CELL_NORM_VOLTS = 3.7;
-        static constexpr float CELL_FULL_VOLTS = 4.2;
-
         static const unsigned NUM_INTERPOLATION_POINTS = 9;
-        static const unsigned MAX_CELLS = 12;
-        
         static const float lipoVoltage[NUM_INTERPOLATION_POINTS];
         static const float lipoPercent[NUM_INTERPOLATION_POINTS];
 
@@ -36,6 +32,7 @@ class BatterySensor {
 
         IVoltageSensor *pVoltageSensor;
         ICurrentSensor *pCurrentSensor;
+        CellCountDetector *pCellCountDetector;
         uint8_t estimateCellCount(float voltage);
         float estimateRemaining(float voltage);
 };

@@ -6,6 +6,7 @@
 #include "AutoCurrentSensor.h"
 #include "CurrentSensor.h"
 #include "BatterySensor.h"
+#include "CellCountDetector.h"
 #include "VoltageSensor.h"
 #include "NeoGPSSensor.h"
 #include "GPSSensor.h"
@@ -39,7 +40,11 @@ void setup() {
 
 
     VoltageSensor *pVoltageSensor = nullptr;
+    CellCountDetector *pCellCountDetector = nullptr;
 #ifdef VOLTAGE_SENSOR
+    pCellCountDetector = new CellCountDetector();
+    pCellCountDetector->setCalibrationPeriod(CALIBRATION_PERIOD);
+
     pVoltageSensor = new VoltageSensor(VOLTAGE_ANALOG_PIN, RESISTOR_TO_VOLTAGE, RESISTOR_TO_GROUND);
     pVoltageSensor->setFilter(new MeanValueFilter());
     pVoltageSensor->setReportInterval(STANDARD_REPORT_INTERVAL);
@@ -52,7 +57,7 @@ void setup() {
     pSensor->setMilliVoltsPerAmp(MILLIVOLTS_PER_AMP);
     pSensor->setFilter(new MeanValueFilter);
     pSensor->setReportInterval(STANDARD_REPORT_INTERVAL);
-    pSensor->setCalibrationPeriod(5000);
+    pSensor->setCalibrationPeriod(CALIBRATION_PERIOD);
     pCurrentSensor = pSensor;
 #endif
 
@@ -60,6 +65,7 @@ void setup() {
     pBatterySensor = new BatterySensor();
     pBatterySensor->setVoltageSensor(pVoltageSensor);
     pBatterySensor->setCurrentSensor(pCurrentSensor);
+    pBatterySensor->setCellCountDetector(pCellCountDetector);
 #endif
 
 #ifdef BARO_ALTITUDE_SENSOR

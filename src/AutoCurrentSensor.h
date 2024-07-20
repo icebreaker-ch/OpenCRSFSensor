@@ -16,7 +16,7 @@
 class AutoCurrentSensor : public CurrentSensor {
     public:
         AutoCurrentSensor(uint8_t analogPin);
-        void setCalibrationPeriod(unsigned long calibrationTime);
+        void setCalibrationPeriod(unsigned long calibrationPeriod);
         virtual void update();
 
     private:

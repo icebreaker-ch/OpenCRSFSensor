@@ -50,7 +50,7 @@
 /**
  * Values for voltage divider
  */
-#define RESISTOR_TO_VOLTAGE 3000
+#define RESISTOR_TO_VOLTAGE 2700
 #define RESISTOR_TO_GROUND  1000
 
 //-----------------------------------------------------------------------------
@@ -60,7 +60,7 @@
 /**
  * Define this if you want to have a current sensor
 */
-#define CURRENT_SENSOR
+//#define CURRENT_SENSOR
 
 #ifdef CURRENT_SENSOR
 /**
@@ -148,6 +148,11 @@
  * Readout for maximum analog voltage
 */
 #define MAX_ANALOG_READ 4096
+
+/**
+ * Period at startup to calibrate sensors
+ */
+#define CALIBRATION_PERIOD 5000 // ms
 
 /**
  * Interval to report new values

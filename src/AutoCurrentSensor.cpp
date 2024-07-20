@@ -35,6 +35,6 @@ void AutoCurrentSensor::update() {
         CurrentSensor::update();
 }
 
-void AutoCurrentSensor::setCalibrationPeriod(unsigned long calibrationTime) {
-    this->calibrationPeriod = calibrationTime;
+void AutoCurrentSensor::setCalibrationPeriod(unsigned long calibrationPeriod) {
+    this->calibrationPeriod = calibrationPeriod;
 }

@@ -1,6 +1,4 @@
-#include <Arduino.h>
 #include "BatterySensor.h"
-#include <math.h>
 #include <Encoder.h>
 #include "log.h"
 
@@ -13,7 +11,8 @@ BatterySensor::BatterySensor() :
     capacity(0),
     remaining(0),
     pVoltageSensor(nullptr),
-    pCurrentSensor(nullptr) {
+    pCurrentSensor(nullptr),
+    pCellCountDetector(nullptr) {
 }
 
 void BatterySensor::setVoltageSensor(IVoltageSensor *pVoltageSensor) {
@@ -24,13 +23,21 @@ void BatterySensor::setCurrentSensor(ICurrentSensor *pCurrentSensor) {
     this->pCurrentSensor = pCurrentSensor;
 }
 
+void BatterySensor::setCellCountDetector(CellCountDetector *pCellCountDetector) {
+    this->pCellCountDetector = pCellCountDetector;
+}
+
 void BatterySensor::update() {
     if (pVoltageSensor) {
         pVoltageSensor->update();
         voltage = pVoltageSensor->getVoltage();
         LOG("Voltage: ", voltage, " V\n");
-        remaining = estimateRemaining(voltage);
-        LOG("Remaining: ", remaining, " %\n");
+
+        pCellCountDetector->addVoltage(voltage);
+        if (pCellCountDetector->calibrationDone()) {
+            remaining = estimateRemaining(voltage);
+            LOG("Remaining: ", remaining, " %\n");
+        }
     }
 
     if (pCurrentSensor) {
@@ -56,19 +63,9 @@ uint8_t *BatterySensor::getPayLoad() {
     return payLoad;
 }
 
-uint8_t BatterySensor::estimateCellCount(float voltage) {
-    for (uint8_t numCells = 1; numCells <= MAX_CELLS; ++numCells) {
-        if ((numCells * CELL_EMPTY_VOLTS <= voltage) && (voltage <= numCells * CELL_FULL_VOLTS)) {
-            return numCells;
-        }
-    }
-    // Strange battery voltage...
-    return max((uint8_t)1, (uint8_t)(round(voltage / CELL_NORM_VOLTS)));
-}
-
 float BatterySensor::estimateRemaining(float voltage) {
     float estimatedRemaining = 0;
-    uint8_t cellCount = estimateCellCount(voltage);
+    uint8_t cellCount = pCellCountDetector->getCellCount();
 
     float cellVoltage = voltage / cellCount;
 
