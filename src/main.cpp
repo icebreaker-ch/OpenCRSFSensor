@@ -35,9 +35,10 @@ static FlightModeSensor *pFlightModeSensor;
 #endif
 
 void setup() {
-    Serial.begin(9600);
-    Serial1.begin(CRSF_BAUDRATE, SERIAL_8N1, CRSF_RX_PIN, CRSF_TX_PIN);
+    pinMode(BUILTIN_LED_PORT, OUTPUT);
 
+    Serial.begin(9600);    
+    Serial1.begin(CRSF_BAUDRATE, SERIAL_8N1, CRSF_RX_PIN, CRSF_TX_PIN);
 
     VoltageSensor *pVoltageSensor = nullptr;
     CellCountDetector *pCellCountDetector = nullptr;
@@ -56,8 +57,8 @@ void setup() {
     AutoCurrentSensor *pSensor = new AutoCurrentSensor(CURRENT_ANALOG_PIN);
     pSensor->setMilliVoltsPerAmp(MILLIVOLTS_PER_AMP);
     pSensor->setFilter(new MeanValueFilter);
-    pSensor->setReportInterval(STANDARD_REPORT_INTERVAL);
     pSensor->setCalibrationPeriod(CALIBRATION_PERIOD);
+    pSensor->setReportInterval(STANDARD_REPORT_INTERVAL);
     pCurrentSensor = pSensor;
 #endif
 
@@ -72,6 +73,7 @@ void setup() {
     Wire.begin(BARO_SDA_PIN, BARO_SCL_PIN);
     pBaroAltitudeSensor = new BaroAltitudeSensor(new BME280());
     pBaroAltitudeSensor->setFilter(new MeanValueFilter());
+    pBaroAltitudeSensor->setCalibrationPeriod(CALIBRATION_PERIOD);
     pBaroAltitudeSensor->setReportInterval(STANDARD_REPORT_INTERVAL);
 #endif
 
@@ -86,7 +88,12 @@ void setup() {
 }
 
 void loop() {
+    static bool ledState = false;
     uint8_t *payLoad;
+
+    digitalWrite(BUILTIN_LED_PORT, ledState ? HIGH : LOW);
+    ledState = !ledState;
+
 #ifdef BATTERY_SENSOR
     pBatterySensor->update();
     payLoad = pBatterySensor->getPayLoad();

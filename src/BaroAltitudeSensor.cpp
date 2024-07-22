@@ -8,24 +8,46 @@
 
 BaroAltitudeSensor::BaroAltitudeSensor(IAltitudeSensor *pAltitudeSensor) :
     pAltitudeSensor(pAltitudeSensor),
+    zeroAltitude(0.0),
     altitude(0.0),
     verticalSpeed(0.0),
     pFilter(nullptr),
+    calibrating(true),
+    calibrationPeriod(0),
     reportInterval(0) {
 }
 
-void BaroAltitudeSensor::update() {
+void BaroAltitudeSensor::calibrate() {
+    float readAltitude = pAltitudeSensor->readAltitude();
+    pFilter->addValue(readAltitude);
+    unsigned long elapsedTime = timer.getElapsedTime();
+    if (elapsedTime >= calibrationPeriod) {
+        zeroAltitude = pFilter->getFilteredValue();
+        calibrating = false;
+        pFilter->reset();
+        timer.reset();
+    }
+}
+
+void BaroAltitudeSensor::updateValue() {
     float readAltitude = pAltitudeSensor->readAltitude();
     pFilter->addValue(readAltitude);
     unsigned long elapsedTime = timer.getElapsedTime();
     if (elapsedTime >= reportInterval) {
-        float newAltitude = pFilter->getFilteredValue();
-        pFilter->reset();        
+        float newAltitude = pFilter->getFilteredValue() - zeroAltitude;
+        pFilter->reset();
         verticalSpeed = 1000.0 * (newAltitude - altitude) / elapsedTime;
         LOG("newAltitude:", newAltitude, " verticalSpeed:", verticalSpeed, "\n");
         altitude = newAltitude;
         timer.reset();
     }
+}
+
+void BaroAltitudeSensor::update() {
+    if (calibrating)
+        calibrate();
+    else
+        updateValue();
 }
 
 uint8_t *BaroAltitudeSensor::getPayLoad() {
@@ -41,6 +63,10 @@ uint8_t *BaroAltitudeSensor::getPayLoad() {
 
 void BaroAltitudeSensor::setFilter(Filter *pFilter) {
     this->pFilter = pFilter;
+}
+
+void BaroAltitudeSensor::setCalibrationPeriod(unsigned long calibrationPeriod) {
+    this->calibrationPeriod = calibrationPeriod;
 }
 
 void BaroAltitudeSensor::setReportInterval(unsigned long reportInterval) {

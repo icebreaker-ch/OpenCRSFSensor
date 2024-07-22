@@ -25,8 +25,8 @@
 /**
  * Pins for CRSF communication
 */
-#define CRSF_RX_PIN GPIO_NUM_16
-#define CRSF_TX_PIN GPIO_NUM_17
+#define CRSF_RX_PIN GPIO_NUM_20
+#define CRSF_TX_PIN GPIO_NUM_21
 
 /**
  * Baudrade for CRSF communication
@@ -45,12 +45,12 @@
 /**
  * Analog pin for Voltage sensor
 */
-#define VOLTAGE_ANALOG_PIN GPIO_NUM_32
+#define VOLTAGE_ANALOG_PIN GPIO_NUM_0
 
 /**
  * Values for voltage divider
  */
-#define RESISTOR_TO_VOLTAGE 2700
+#define RESISTOR_TO_VOLTAGE 3000
 #define RESISTOR_TO_GROUND  1000
 
 //-----------------------------------------------------------------------------
@@ -60,13 +60,13 @@
 /**
  * Define this if you want to have a current sensor
 */
-//#define CURRENT_SENSOR
+#define CURRENT_SENSOR
 
 #ifdef CURRENT_SENSOR
 /**
  * Analog pin for Current sensor
 */
-#define CURRENT_ANALOG_PIN GPIO_NUM_33
+#define CURRENT_ANALOG_PIN GPIO_NUM_1
 
 /**
  * Current sensor parameters
@@ -97,8 +97,8 @@
 /**
  * Pins for Baro I2C communication
  */
-#define BARO_SDA_PIN GPIO_NUM_21
-#define BARO_SCL_PIN GPIO_NUM_22
+#define BARO_SDA_PIN GPIO_NUM_6
+#define BARO_SCL_PIN GPIO_NUM_7
 
 #endif
 
