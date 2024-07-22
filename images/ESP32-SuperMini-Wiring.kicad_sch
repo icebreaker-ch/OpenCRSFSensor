@@ -841,11 +841,11 @@
     (uuid fa610933-af9c-452d-a14b-5b88d57399eb)
   )
 
-  (image (at 160.02 144.78)
+  (image (at 96.52 158.75) (scale 2.40819)
     (uuid 1d2aaa28-18b2-494a-8189-b8b24db3061c)
     (data
       iVBORw0KGgoAAAANSUhEUgAAAu8AAAFICAIAAABvEIfNAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
-      AAsSAAALEgHS3X78AAAgAElEQVR4nOy9WbMl13Um9q21dmaec+e6NaMwFQCS4DxIFBVUDwq17Qi/
+      AArwAAAK8AFCrDSYAAAgAElEQVR4nOy9WbMl13Um9q21dmaec+e6NaMwFQCS4DxIFBVUDwq17Qi/
       uB22FY5otx1+9ov/hN/8G/zQT27bIbvDYbXDEXYrZLWoNkVRFEWKA0CAAAEUar7DmTL3Xmv5YWee
       m+cOVbeKoIgC84uKrHPz5LAzT+be3/7WRO6OAQMGDDgT9utuwC8D/nU3YMCAAX8fGF71AQMGfFIx
       9G8DBvymIPy6GzBgwICPOQZOMGDAgI87hn5qwIABAwYMGPBsY2AzAwYMGDBgwIBnGwObGTBgwIAB
@@ -4940,10 +4940,10 @@
     (property "Datasheet" "https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BMP280-DS001.pdf" (id 3) (at 242.57 63.5 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "" (uuid bac8f8c4-c257-4c52-bd63-dfd293b5ded8))
-    (pin "" (uuid 32e0ed4c-13df-4f8f-b5a2-90e33a58458f))
-    (pin "" (uuid bb641032-4621-479e-b055-c7287eb0e34e))
-    (pin "" (uuid f0336c6c-1837-4a6e-a52d-33813351c061))
+    (pin "" (uuid f0336c6c-1837-4a6e-a52d-33813351c064))
+    (pin "" (uuid f0336c6c-1837-4a6e-a52d-33813351c064))
+    (pin "" (uuid f0336c6c-1837-4a6e-a52d-33813351c064))
+    (pin "" (uuid f0336c6c-1837-4a6e-a52d-33813351c064))
   )
 
   (symbol (lib_id "Device:R") (at 85.09 106.68 0) (unit 1)
@@ -5177,14 +5177,14 @@
     (property "Datasheet" "http://www.allegromicro.com/~/media/Files/Datasheets/ACS724KMA-Datasheet.ashx?la=en" (id 3) (at 67.31 46.99 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (pin "" (uuid 63fc5ea1-d85a-4560-928a-e28be36b7bab))
+    (pin "" (uuid 63fc5ea1-d85a-4560-928a-e28be36b7bab))
+    (pin "" (uuid 63fc5ea1-d85a-4560-928a-e28be36b7bab))
+    (pin "" (uuid 63fc5ea1-d85a-4560-928a-e28be36b7bab))
     (pin "1" (uuid b0bdcd64-9646-4a42-97f7-a3f282b3c0c6))
-    (pin "" (uuid 7d850206-5aa8-4753-b28a-dd11c60cf8d6))
     (pin "12" (uuid c1567e76-ddb4-4523-847d-9d194e3ba473))
-    (pin "" (uuid 0eb51533-3c20-436d-a79c-b320c1bb2b19))
-    (pin "" (uuid bd35e68b-7174-42d2-a354-aa45cb0a2ae5))
     (pin "3" (uuid cb89a385-97fe-421f-a285-7fb883f7b435))
     (pin "4" (uuid e2acdcdb-e756-4996-bbd7-3b16a96759fb))
-    (pin "" (uuid 63fc5ea1-d85a-4560-928a-e28be36b7ba8))
     (pin "6" (uuid ab38632d-e66c-4777-b287-a94898cbaf75))
     (pin "7" (uuid 1f6e8379-2aa7-4ef7-b833-97f5ed4720f4))
     (pin "8" (uuid 9dc4a591-2ec8-4eaa-b705-a6fb86db6f3b))
