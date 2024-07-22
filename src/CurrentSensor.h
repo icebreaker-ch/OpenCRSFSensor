@@ -14,7 +14,7 @@
  */
 class CurrentSensor : public ICurrentSensor {
     public:
-        CurrentSensor(uint8_t analogPin);
+        explicit CurrentSensor(uint8_t analogPin);
         void setMilliVoltsForZeroAmps(double milliVoltsForZeroAmps);
         void setMilliVoltsPerAmp(double milliVoltsPerAmp);
         void setReportInterval(unsigned long reportInterval);

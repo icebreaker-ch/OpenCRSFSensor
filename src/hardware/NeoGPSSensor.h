@@ -9,7 +9,7 @@
 class NeoGPSSensor : public IGPSDataProvider {
     public:
         explicit NeoGPSSensor(Stream &stream);
-        void update();
+        void update() override;
         uint8_t getSattelites() override;
         double getLongitude() override;
         double getLatitude() override;

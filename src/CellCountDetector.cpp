@@ -3,6 +3,7 @@
 
 CellCountDetector::CellCountDetector() :
     calibrating(true),
+    calibrationPeriod(0),
     cellCount(0) {
 }
 
