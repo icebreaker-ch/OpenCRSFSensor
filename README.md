@@ -22,4 +22,4 @@ graph LR;
 RC Receiver"]
 ```
 ## ESP32 Super Mini wiring example
-![ESP32 SuperMini Connections](https://github.com/icebreaker-ch/OpenCRSFSensor/assets/3645375/0644d657-7215-4514-9575-bd55a2f53a8d)
+![ESP32-SuperMini-Wiring](https://github.com/user-attachments/assets/ae720563-cb10-4579-b841-08db06d07008)
