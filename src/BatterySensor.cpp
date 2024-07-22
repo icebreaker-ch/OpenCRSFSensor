@@ -10,6 +10,7 @@ BatterySensor::BatterySensor() :
     current(0),
     capacity(0),
     remaining(0),
+    payLoad{0,},
     pVoltageSensor(nullptr),
     pCurrentSensor(nullptr),
     pCellCountDetector(nullptr) {

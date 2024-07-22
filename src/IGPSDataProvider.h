@@ -3,7 +3,7 @@
 
 class IGPSDataProvider {
     public:
-        virtual void update();
+        virtual void update() = 0;
         virtual uint8_t getSattelites() = 0;
         virtual double getLongitude() = 0;
         virtual double getLatitude() = 0;

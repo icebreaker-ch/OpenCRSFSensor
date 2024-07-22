@@ -15,11 +15,13 @@
  */
 class AutoCurrentSensor : public CurrentSensor {
     public:
-        AutoCurrentSensor(uint8_t analogPin);
+        explicit AutoCurrentSensor(uint8_t analogPin);
         void setCalibrationPeriod(unsigned long calibrationPeriod);
-        virtual void update();
+        virtual void update() override;
 
     private:
+        AutoCurrentSensor(const AutoCurrentSensor &) = delete;
+        void operator=(const AutoCurrentSensor &) = delete;
         Filter *pCalibrationFilter;
         unsigned long calibrationPeriod;
         bool calibrating;
