@@ -12,14 +12,18 @@ Microcontrollers:
 - ESP32-C3 SuperMini
 
 ```mermaid
-graph LR;
-    vs(Voltage Sensor)-->esp["ESP32
-                              Microcontroller"];
-    cs(Current Sensor)-->esp;
-    baro(Baro)-->esp
-    gps(GPS)-->esp
-    esp-->rc["ExpressLRS
-RC Receiver"]
-```
+graph TB;
+    subgraph RC Model
+        direction LR
+        vs(Voltage Sensor)--V=f(volatage)-->esp["ESP32
+                                          Microcontroller"];
+        cs(Current Sensor)--V=f(current)-->esp;
+        baro(Baro)--I2C-->esp
+        gps(GPS)--Serial-->esp
+        esp-- Serial Crossfire -->rx["ExpressLRS
+        RC Receiver"]
+    end
+    rx-. Telemetry data.->tx[Transmitter]
+   ```
 ## ESP32 Super Mini wiring example
 ![ESP32-SuperMini-Wiring](https://github.com/user-attachments/assets/ae720563-cb10-4579-b841-08db06d07008)
