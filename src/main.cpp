@@ -37,12 +37,18 @@ static FlightModeSensor *pFlightModeSensor;
 void setup() {
     pinMode(BUILTIN_LED_PORT, OUTPUT);
 
-    Serial.begin(9600);    
+    Serial.begin(9600);
+#if defined(CRSF_RX_PIN) && defined(CRSF_TX_PIN)
     Serial1.begin(CRSF_BAUDRATE, SERIAL_8N1, CRSF_RX_PIN, CRSF_TX_PIN);
+#else
+    Serial1.begin(CRSF_BAUDRATE);
+#endif
 
+#ifdef BATTERY_SENSOR
     VoltageSensor *pVoltageSensor = nullptr;
-    CellCountDetector *pCellCountDetector = nullptr;
+#endif
 #ifdef VOLTAGE_SENSOR
+    CellCountDetector *pCellCountDetector = nullptr;
     pCellCountDetector = new CellCountDetector();
     pCellCountDetector->setCalibrationPeriod(CALIBRATION_PERIOD);
 
@@ -51,8 +57,9 @@ void setup() {
     pVoltageSensor->setReportInterval(STANDARD_REPORT_INTERVAL);
 #endif
 
+#ifdef BATTERY_SENSOR
     ICurrentSensor *pCurrentSensor = nullptr;
-
+#endif
 #ifdef CURRENT_SENSOR
     AutoCurrentSensor *pSensor = new AutoCurrentSensor(CURRENT_ANALOG_PIN);
     pSensor->setMilliVoltsPerAmp(MILLIVOLTS_PER_AMP);

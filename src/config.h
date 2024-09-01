@@ -6,12 +6,12 @@
 /**
  * Standard pin configurations
  * 
- * Purpose          ESP32 WROOM     ESP32 Super Mini
- * ------------     -----------     ----------------
- * CRSF RX (ws)     GPIO16          GPIO20/RX
- * CRSF TX (gn)     GPIO17          GPIO21/TX
- * Voltage          GPIO32          ADC1-0/GPIO0
- * Current          GPIO33          ADC1-1/GPIO1
+ * Purpose          ESP32 WROOM     ESP32 Super Mini  Arduino Pro micro
+ * ------------     -----------     ----------------  -----------------
+ * CRSF RX (ws)     GPIO16          GPIO20/RX         leave undefined
+ * CRSF TX (gn)     GPIO17          GPIO21/TX         leave undefined
+ * Voltage          GPIO32          ADC1-0/GPIO0      A0
+ * Current          GPIO33          ADC1-1/GPIO1      A1  
  * Baro SDA         GPIO21          GPIO6/SDA
  * Baro SCL         GPIO22          GPIO7/SCL
  * GPS RX (og)      GPIO18          --            
@@ -23,10 +23,10 @@
 //-----------------------------------------------------------------------------
 
 /**
- * Pins for CRSF communication
+ * Pins for CRSF communication (leave out for Arduino Pro micro)
 */
-#define CRSF_RX_PIN GPIO_NUM_20
-#define CRSF_TX_PIN GPIO_NUM_21
+//#define CRSF_RX_PIN GPIO_NUM_20
+//#define CRSF_TX_PIN GPIO_NUM_21
 
 /**
  * Baudrade for CRSF communication
@@ -42,10 +42,11 @@
 */
 #define VOLTAGE_SENSOR
 
+#ifdef VOLTAGE_SENSOR
 /**
  * Analog pin for Voltage sensor
 */
-#define VOLTAGE_ANALOG_PIN GPIO_NUM_0
+#define VOLTAGE_ANALOG_PIN A0 //GPIO_NUM_0
 
 /**
  * Values for voltage divider
@@ -53,6 +54,7 @@
 #define RESISTOR_TO_VOLTAGE 3000
 #define RESISTOR_TO_GROUND  1000
 
+#endif
 //-----------------------------------------------------------------------------
 // Current Sensor
 //-----------------------------------------------------------------------------
@@ -60,13 +62,13 @@
 /**
  * Define this if you want to have a current sensor
 */
-#define CURRENT_SENSOR
+//#define CURRENT_SENSOR
 
 #ifdef CURRENT_SENSOR
 /**
  * Analog pin for Current sensor
 */
-#define CURRENT_ANALOG_PIN GPIO_NUM_1
+#define CURRENT_ANALOG_PIN A1 //GPIO_NUM_1
 
 /**
  * Current sensor parameters
@@ -90,7 +92,7 @@
 /**
  * Define this if you want to have a Baro (Vario) sensor
 */
-#define BARO_ALTITUDE_SENSOR
+//#define BARO_ALTITUDE_SENSOR
 
 #ifdef BARO_ALTITUDE_SENSOR
 
@@ -133,7 +135,7 @@
 /**
  * Define this if you want to have a FlightMode sensor
 */
-//#define FLIGHT_MODE_SENSOR
+#define FLIGHT_MODE_SENSOR
 
 
 //-----------------------------------------------------------------------------
