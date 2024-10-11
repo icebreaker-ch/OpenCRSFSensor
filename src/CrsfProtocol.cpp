@@ -25,9 +25,9 @@ void CRSFProtocol::setData(uint8_t frameType, const uint8_t *payLoad, uint8_t pa
     bufferLen = payLoadLen + 4;
 }
 
-void CRSFProtocol::write(HardwareSerial &serial) {
-    while (serial.availableForWrite() < bufferLen) {
+void CRSFProtocol::write(Stream &stream) {
+    while (stream.availableForWrite() < bufferLen) {
       delay(10);
     }
-    serial.write(buffer, bufferLen);
+    stream.write(buffer, bufferLen);
 }

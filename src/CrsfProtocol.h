@@ -9,7 +9,7 @@ class CRSFProtocol {
     public:
         explicit CRSFProtocol(Crc8 &crc8);
         void setData(uint8_t frameType, const uint8_t *payLoad, uint8_t payLoadLen);
-        void write(HardwareSerial &serial);
+        void write(Stream &stream);
 
         static const uint16_t MAX_LEN = 64;
         static const uint8_t CRSF_POLY = 0xD5;
