@@ -34,14 +34,18 @@ static GPSSensor *pGPSSensor;
 static FlightModeSensor *pFlightModeSensor;
 #endif
 
+Stream *pCrsfStream = nullptr;
+
 void setup() {
     pinMode(BUILTIN_LED_PORT, OUTPUT);
 
     Serial.begin(9600);
 #if defined(CRSF_RX_PIN) && defined(CRSF_TX_PIN)
     Serial1.begin(CRSF_BAUDRATE, SERIAL_8N1, CRSF_RX_PIN, CRSF_TX_PIN);
+    pCrsfStream = &Serial1;
 #else
     Serial1.begin(CRSF_BAUDRATE);
+    pCrsfStream = &Serial1;
 #endif
 
 #ifdef BATTERY_SENSOR
@@ -105,28 +109,28 @@ void loop() {
     pBatterySensor->update();
     payLoad = pBatterySensor->getPayLoad();
     protocol.setData(BatterySensor::FRAMETYPE, payLoad, BatterySensor::PAYLOAD_LEN);
-    protocol.write(Serial1);
+    protocol.write(*pCrsfStream);
 #endif
 
 #ifdef BARO_ALTITUDE_SENSOR
     pBaroAltitudeSensor->update();
     payLoad = pBaroAltitudeSensor->getPayLoad();
     protocol.setData(BaroAltitudeSensor::FRAMETYPE, payLoad, BaroAltitudeSensor::PAYLOAD_LEN);
-    protocol.write(Serial1);
+    protocol.write(*pCrsfStream);
 #endif
 
 #ifdef GPS_SENSOR
     pGPSSensor->update();
     payLoad = pGPSSensor->getPayLoad();
     protocol.setData(GPSSensor::FRAMETYPE, payLoad, GPSSensor::PAYLOAD_LEN);
-    protocol.write(Serial1);
+    protocol.write(*pCrsfStream);
 #endif
 
 #ifdef FLIGHT_MODE_SENSOR
     pFlightModeSensor->update();
     payLoad = pFlightModeSensor->getPayLoad();
     protocol.setData(FlightModeSensor::FRAMETYPE, payLoad, pFlightModeSensor->getPayLoadLen());
-    protocol.write(Serial1);
+    protocol.write(*pCrsfStream);
 #endif
  
   	delay(UPDATE_RATE);
