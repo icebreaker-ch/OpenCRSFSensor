@@ -38,14 +38,23 @@ Stream *pCrsfStream = nullptr;
 
 void setup() {
     pinMode(BUILTIN_LED_PORT, OUTPUT);
+#ifdef ANALOG_REFERENCE_SOURCE
+    analogReference(ANALOG_REFERENCE_SOURCE);
+#endif
 
     Serial.begin(9600);
+
+#ifdef ARDUINO_AVR_PRO
+    Serial.begin(CRSF_BAUDRATE, SERIAL_8N1);
+    pCrsfStream = &Serial;
+#else
 #if defined(CRSF_RX_PIN) && defined(CRSF_TX_PIN)
     Serial1.begin(CRSF_BAUDRATE, SERIAL_8N1, CRSF_RX_PIN, CRSF_TX_PIN);
     pCrsfStream = &Serial1;
 #else
     Serial1.begin(CRSF_BAUDRATE);
     pCrsfStream = &Serial1;
+#endif
 #endif
 
 #ifdef BATTERY_SENSOR

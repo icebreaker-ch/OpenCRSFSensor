@@ -59,5 +59,5 @@ double CurrentSensor::getConsumption() {
 
 double CurrentSensor::readPinVoltage() {
     uint16_t analogReadValue = analogRead(analogPin);
-    return analogReadValue * ANALOG_REFERENCE_VOLTAGE / MAX_ANALOG_READ;
+    return analogReadValue * (ANALOG_REFERENCE_VOLTAGE / 1000.0)  / MAX_ANALOG_READ;
 }

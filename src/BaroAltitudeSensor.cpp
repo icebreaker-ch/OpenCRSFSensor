@@ -7,12 +7,12 @@
 #include "BaroAltitudeSensor.h"
 
 BaroAltitudeSensor::BaroAltitudeSensor(IAltitudeSensor *pAltitudeSensor) :
-    pAltitudeSensor(pAltitudeSensor),
+    calibrating(true),
     zeroAltitude(0.0),
     altitude(0.0),
     verticalSpeed(0.0),
+    pAltitudeSensor(pAltitudeSensor),
     pFilter(nullptr),
-    calibrating(true),
     calibrationPeriod(0),
     reportInterval(0) {
 }

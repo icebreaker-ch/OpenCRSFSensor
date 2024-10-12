@@ -6,16 +6,16 @@
 /**
  * Standard pin configurations
  * 
- * Purpose          ESP32 WROOM     ESP32 Super Mini  Arduino Pro micro
- * ------------     -----------     ----------------  -----------------
- * CRSF RX (ws)     GPIO16          GPIO20/RX         leave undefined
- * CRSF TX (gn)     GPIO17          GPIO21/TX         leave undefined
- * Voltage          GPIO32          ADC1-0/GPIO0      A0
- * Current          GPIO33          ADC1-1/GPIO1      A1  
- * Baro SDA         GPIO21          GPIO6/SDA
- * Baro SCL         GPIO22          GPIO7/SCL
- * GPS RX (og)      GPIO18          --            
- * GPS TX (bl)      GPIO19          --
+ * Purpose       ESP32 WROOM  ESP32 Super Mini  Arduino Pro micro            Arduino Pro mini
+ * ------------  -----------  ----------------  ---------------------------  ----------------
+ * CRSF RX (ws)  GPIO_NUM_16  GPIO20/RX         undefined (Standard RX pin)  undifined
+ * CRSF TX (gn)  GPIO_NUM_17  GPIO21/TX         undefined (Standard TX pin)  undefined
+ * Voltage       GPIO_NUM_32  ADC1-0/GPIO0      A0                           A0
+ * Current       GPIO_NUM_33  ADC1-1/GPIO1      A1                           A1
+ * Baro SDA      GPIO_NUM_21  GPIO6/SDA
+ * Baro SCL      GPIO_NUM_22  GPIO7/SCL
+ * GPS RX (og)   GPIO_NUM_18  --            
+ * GPS TX (bl)   GPIO_NUM_19  --
  */
 
 //-----------------------------------------------------------------------------
@@ -23,15 +23,15 @@
 //-----------------------------------------------------------------------------
 
 /**
- * Pins for CRSF communication (leave out for Arduino Pro micro)
+ * Pins for CRSF communication (leave out for Arduino Pro micro and mini)
 */
-//#define CRSF_RX_PIN GPIO_NUM_20
-//#define CRSF_TX_PIN GPIO_NUM_21
+//#define CRSF_RX_PIN GPIO_NUM_16
+//#define CRSF_TX_PIN GPIO_NUM_17
 
 /**
- * Baudrade for CRSF communication
+ * Baudrade for CRSF communication 416666, 420000
 */
-#define CRSF_BAUDRATE 416666 //420000
+#define CRSF_BAUDRATE 416666
 
 //-----------------------------------------------------------------------------
 // Voltage Sensor
@@ -46,12 +46,12 @@
 /**
  * Analog pin for Voltage sensor
 */
-#define VOLTAGE_ANALOG_PIN A0 //GPIO_NUM_0
+#define VOLTAGE_ANALOG_PIN A0
 
 /**
  * Values for voltage divider
  */
-#define RESISTOR_TO_VOLTAGE 3000
+#define RESISTOR_TO_VOLTAGE 22000
 #define RESISTOR_TO_GROUND  1000
 
 #endif
@@ -62,19 +62,19 @@
 /**
  * Define this if you want to have a current sensor
 */
-//#define CURRENT_SENSOR
+#define CURRENT_SENSOR
 
 #ifdef CURRENT_SENSOR
 /**
  * Analog pin for Current sensor
 */
-#define CURRENT_ANALOG_PIN A1 //GPIO_NUM_1
+#define CURRENT_ANALOG_PIN A1
 
 /**
  * Current sensor parameters
  */
 //#define MILLIVOLTS_FOR_ZERO_AMP 2063 // not required for AutoCurrentSensor
-#define MILLIVOLTS_PER_AMP 30
+#define MILLIVOLTS_PER_AMP 16.6
 
 #endif
 
@@ -135,34 +135,35 @@
 /**
  * Define this if you want to have a FlightMode sensor
 */
-#define FLIGHT_MODE_SENSOR
+//#define FLIGHT_MODE_SENSOR
 
 
 //-----------------------------------------------------------------------------
 // General config
 //-----------------------------------------------------------------------------
 /**
- * Reference voltage for analog measurments
+ * Reference voltage for analog measurments [mV]
 */
-#define ANALOG_REFERENCE_VOLTAGE 3.3
+#define ANALOG_REFERENCE_VOLTAGE INTERNAL_REFERENCE_VOLTAGE
 
 /**
- * Readout for maximum analog voltage
+ * Readout for maximum analog voltage.
+ * Possible values: 1024, 4096 etc.
 */
-#define MAX_ANALOG_READ 4096
+#define MAX_ANALOG_READ ADC_RESOLUTION
 
 /**
- * Period at startup to calibrate sensors
+ * Period at startup to calibrate sensors [ms]
  */
-#define CALIBRATION_PERIOD 5000 // ms
+#define CALIBRATION_PERIOD 5000
 
 /**
- * Interval to report new values
+ * Interval to report new values [ms]
 */
 #define STANDARD_REPORT_INTERVAL 500
 
 /**
- * Number of milliseconds for sensor timeout
+ * Number of milliseconds for sensor timeout [ms]
  */
 #define SENSOR_TIMEOUT 10000
 

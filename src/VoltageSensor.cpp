@@ -21,7 +21,7 @@ void VoltageSensor::setReportInterval(unsigned long reportInterval) {
 
 void VoltageSensor::update() {
     int analogReadValue = analogRead(analogPin);
-    double pinVoltage = (analogReadValue * ANALOG_REFERENCE_VOLTAGE) / MAX_ANALOG_READ;
+    double pinVoltage = (analogReadValue * (ANALOG_REFERENCE_VOLTAGE / 1000.0)) / MAX_ANALOG_READ;
     double inputVoltage = pinVoltage * (resistorToGround + resistorToVoltage) / resistorToGround;
     pFilter->addValue(inputVoltage);
 
