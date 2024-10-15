@@ -38,7 +38,7 @@ Stream *pCrsfStream = nullptr;
 
 void setup() {
     pinMode(BUILTIN_LED_PORT, OUTPUT);
-#ifdef ANALOG_REFERENCE_SOURCE
+#ifdef CONFIGURE_ANALOG_REFERENCE_SOURCE
     analogReference(ANALOG_REFERENCE_SOURCE);
 #endif
 

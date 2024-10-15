@@ -33,6 +33,10 @@
 */
 #define CRSF_BAUDRATE 416666
 
+#ifdef CONFIGURE_ANALOG_REFERENCE_SOURCE
+#define ANALOG_REFERENCE_SOURCE INTERNAL
+#endif
+
 //-----------------------------------------------------------------------------
 // Voltage Sensor
 //-----------------------------------------------------------------------------
