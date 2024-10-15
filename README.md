@@ -4,12 +4,16 @@ Microcontroller.
 
 Currently supported and tested are the following components:
 
-RC Receivers:
-- <em>Radiomaster ER8</em> ELRS (Express LRS) Receiver
+ELRS RC Receivers:
+- <em>Radiomaster</em> ER6
+- <em>Radiomaster</em> ER8
+- <em>BetaFPV</em> Super P14
 
 Microcontrollers:
 - WROOM ESP32
 - ESP32-C3 SuperMini
+- Arduino Pro Mini
+- Arduino Pro Micro
 
 ```mermaid
 graph TB;
