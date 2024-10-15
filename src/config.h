@@ -34,6 +34,12 @@
 #define CRSF_BAUDRATE 416666
 
 #ifdef CONFIGURE_ANALOG_REFERENCE_SOURCE
+/**
+ * The Source of analog Voltage reference for boards supporting the setting.
+ * - DEFAULT (VCC)
+ * - INTERNAL (1.1 or 2.56 V)
+ * - EXTERNAL (external voltage at AREF pin)
+ */
 #define ANALOG_REFERENCE_SOURCE INTERNAL
 #endif
 
