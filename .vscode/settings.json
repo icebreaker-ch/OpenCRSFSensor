@@ -11,5 +11,6 @@
         "initializer_list": "cpp",
         "cmath": "cpp"
     },
-    "svn.ignoreMissingSvnWarning": true
+    "svn.ignoreMissingSvnWarning": true,
+    "sarif-viewer.connectToGithubCodeScanning": "off"
 }
