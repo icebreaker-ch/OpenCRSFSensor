@@ -21,6 +21,7 @@ void CurrentSensor::setFilter(Filter *pFilter) {
 void CurrentSensor::update() {
     double pinVoltage = readPinVoltage();
     double readCurrent = (1000.0 * pinVoltage - milliVoltsForZeroAmps) / milliVoltsPerAmp;
+    readCurrent = max(readCurrent, 0); // ensure current >= zero
 
     pFilter->addValue(readCurrent);
 
